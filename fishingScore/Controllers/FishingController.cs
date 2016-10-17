@@ -106,14 +106,15 @@ namespace fishingScore.Controllers
                 Contestant = new ContestantViewModel
                 {
                     Id = item.ContestantId, Number = item.Contestant.Number, GroupNum = item.Contestant.GroupNum, Name = item.Contestant.Name
-                }}));
+                }}).OrderBy(item => item.Contestant.Number).ToList());
         }
 
 
         [HttpPost]
-        public ActionResult Start(IList<RoundScoreViewModel> models)
+        public ActionResult Start(IList<RoundScorePostViewModel> models)
         {
-            return View();
+            //todo: 保存到数据库中，然后提示开始下一层比赛
+            return View("Round");
         }
 
         

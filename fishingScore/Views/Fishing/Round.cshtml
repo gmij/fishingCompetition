@@ -1,40 +1,41 @@
-﻿@model IEnumerable<fishingScore.Models.RoundScoreViewModel>
+﻿@model IList<fishingScore.Models.RoundScoreViewModel>
 
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Contestant.Name)
+            选手名字
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Contestant.Number)
+            选手编号
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Result)
+            成绩
         </th>
         <th></th>
     </tr>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    foreach (var item in Model)
+    //foreach (var item in Model)
+    for(var i = 0; i < Model?.Count(); i++)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Contestant.Name)
+                @Html.DisplayFor(modelItem => Model[i].Contestant.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Contestant.Number)
+                @Html.DisplayFor(modelItem => Model[i].Contestant.Number)
             </td>
             <td>
-                @Html.HiddenFor(model => item.Id)
-                @Html.EditorFor(modelItem => item.Result)
+                @Html.HiddenFor(model => Model[i].Id)
+                @Html.EditorFor(modelItem => Model[i].Result)
             </td>
         </tr>
     }
 
     <tr>
         <td colspan="4">
-            <input type="submit" value="创建" class="btn btn-default" />
+            <input type="submit" value="结束本场比赛" class="btn btn-default" />
         </td>
     </tr>
             
