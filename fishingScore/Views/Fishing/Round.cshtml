@@ -1,0 +1,43 @@
+﻿@model IEnumerable<fishingScore.Models.RoundScoreViewModel>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.Number)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Result)
+        </th>
+        <th></th>
+    </tr>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contestant.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contestant.Number)
+            </td>
+            <td>
+                @Html.HiddenFor(model => item.Id)
+                @Html.EditorFor(modelItem => item.Result)
+            </td>
+        </tr>
+    }
+
+    <tr>
+        <td colspan="4">
+            <input type="submit" value="创建" class="btn btn-default" />
+        </td>
+    </tr>
+            
+
+}
+</table>
