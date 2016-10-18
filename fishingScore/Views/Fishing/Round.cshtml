@@ -28,6 +28,7 @@
             </td>
             <td>
                 @Html.HiddenFor(model => Model[i].Id)
+                @Html.HiddenFor(model => Model[i].Contestant.GroupNum)
                 @Html.EditorFor(modelItem => Model[i].Result)
             </td>
         </tr>
@@ -35,7 +36,7 @@
 
     <tr>
         <td colspan="4">
-            <input type="submit" value="结束本场比赛" class="btn btn-default" />
+            <input type="submit" value="结束本轮比赛" class="btn btn-default" />
         </td>
     </tr>
             

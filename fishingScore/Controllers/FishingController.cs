@@ -101,12 +101,17 @@ namespace fishingScore.Controllers
             _context.RoundScores.AddRange(roundScore);
             var r = _context.SaveChanges();
 
-            return View("Round", roundScore.Select(item => new RoundScoreViewModel() {
+            return View("Round", roundScore.Select(item => new RoundScoreViewModel()
+            {
                 Id = item.Id,
                 Contestant = new ContestantViewModel
                 {
-                    Id = item.ContestantId, Number = item.Contestant.Number, GroupNum = item.Contestant.GroupNum, Name = item.Contestant.Name
-                }}).OrderBy(item => item.Contestant.Number).ToList());
+                    Id = item.ContestantId,
+                    Number = item.Contestant.Number,
+                    GroupNum = item.Contestant.GroupNum,
+                    Name = item.Contestant.Name
+                }
+            }).OrderBy(item => item.Contestant.Number).ToList());
         }
 
 
@@ -114,9 +119,112 @@ namespace fishingScore.Controllers
         public ActionResult Start(IList<RoundScorePostViewModel> models)
         {
             //todo: 保存到数据库中，然后提示开始下一层比赛
+            var scores = StatisticalScore(models);
             return View("Round");
         }
 
-        
+
+        public static IList<RoundScore> StatisticalScore(IList<RoundScorePostViewModel> scores)
+        {
+            var scoresOrder = scores.OrderBy(s => s.GroupNum).ThenByDescending(s => s.Result);
+            var i = 0;
+            var beforeScore = scoresOrder.First();
+            var result = new List<RoundScore>();
+            foreach (var score in scoresOrder)
+            {
+                var s = new RoundScore
+                {
+                    Id = score.Id,
+                    Result = score.Result,
+                    Score =
+                        score.Result == 0f
+                            ? scoresOrder.Count(s1 => s1.GroupNum == score.GroupNum) + 1
+                            : score.GroupNum != beforeScore.GroupNum ? (i = 1) : ++i
+                };
+                result.Add(s);
+                beforeScore = score;
+            }
+            return result;
+        }
+
+        public static IList<RoundScore> AverageEqualScores(IList<RoundScore> scores)
+        {
+
+            var items = scores.OrderBy(s => s.Result).ToArray();
+            for (var i = 0; i < items.Count(); i++)
+            {
+                var item = items[i];
+                var ls = scores.Where(s => s.Result.Equals(item.Result));
+                var lsCount = ls.Count();
+                if (lsCount > 1)
+                {
+                    var ave = ls.Sum(s => s.Score)/lsCount;
+                    foreach (var score in ls)
+                    {
+                        score.Score = ave;
+                    }
+                }
+                i += lsCount;
+            }
+            return scores;
+        }
+
+        public static IEnumerable<ContestantCompetitionScore> Order(IList<ContestantCompetitionScore> scores)
+        {
+            var ls = scores.OrderBy(s => s.TotalScore).ToList();
+            var i = 0;
+            foreach (var t in ls)
+            {
+                t.Order = ++i;
+            }
+            for (i = 0; i < ls.Count();)
+            {
+                var item = ls[i];
+                var ts = scores.Where(s => s.TotalScore.Equals(item.TotalScore)).ToList();
+                var tsCount = ts.Count();
+                if (tsCount > 1)
+                {
+                    var us = new List<RoundScore>();
+                    foreach (var score in ts)
+                    {
+                        us.AddRange(score.RoundScores);
+                    }
+                    var uo = us.OrderBy(u => u.Score).ThenByDescending(u => u.Result).ToList();
+
+                    var k = 1;
+                    var c = uo.First();
+                    foreach (var score in uo)
+                    {
+                        if (score.Id != c.Id)
+                            k++;
+                        if (k > tsCount)
+                            break;
+                        if (ts.Any())
+                        {
+                            var b = ts.FirstOrDefault(t => t.Name == score.Id);
+                            if (b != null)
+                            {
+                                b.Order = i + k;
+                                ts.Remove(b);
+                                c = score;
+                            }
+                        }
+                    }
+
+                    i += tsCount;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return ls.OrderBy(l => l.Order);
+        }
     }
+
+
+
+
+
+
 }
