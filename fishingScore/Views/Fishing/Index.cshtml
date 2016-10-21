@@ -1,0 +1,39 @@
+﻿@model IEnumerable<fishingScore.Models.GamingViewModel>
+
+<p>
+    @Html.ActionLink("新建比赛", "New")
+    @Html.ActionLink("已结束比赛", "Over")
+</p>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Round)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Round)
+        </td>
+        <td>
+            @Html.ActionLink("进入第" + item.Round + "轮比赛计分现场", "Round", new { Id = item.Round }) |
+        </td>
+    </tr>
+}
+
+</table>

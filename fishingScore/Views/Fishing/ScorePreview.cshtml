@@ -1,0 +1,104 @@
+﻿@model fishingScore.Models.ScorePreviewViewModel
+
+
+<h2 align="center">
+    @Model.Title<span>成绩汇总表预览</span></h2>
+<h4 align="right">@Model.Time</h4>
+
+<style>
+    th, td {
+        border: 1px solid grey;
+        text-align: center;
+        vertical-align: bottom;
+    }
+
+    input[type=text] {
+        text-align: center;
+        width: 30px;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <table class="table">
+        @for (var i = 0; i < Model.Scores.Count; i++)
+        {
+            var item = Model.Scores[i];
+            if (i == 0)
+            {
+                <tr>
+                    <th rowspan="2">
+                        @Html.DisplayNameFor(model => item.Order)
+                    </th>
+                    <th rowspan="2">
+                        @Html.DisplayNameFor(model => item.TotalScore)
+                    </th>
+                    <th rowspan="2">
+                        @Html.DisplayNameFor(model => item.Number)
+                    </th>
+                    <th rowspan="2">
+                        @Html.DisplayNameFor(model => item.Name)</th>
+                    <th colspan="2">第一场</th>
+                    <th colspan="2">第二场</th>
+                    @if (item.Round3 != null)
+                    {
+                        <th colspan="2">第三场</th>
+                    }
+                    @if (item.Round4 != null)
+                    {
+                        <th colspan="2">第四场</th>
+                    }
+                    <th rowspan="2">总成绩</th>
+                </tr>
+                <tr>
+                    <th>成绩</th>
+                    <th>得分</th>
+                    <th>成绩</th>
+                    <th>得分</th>
+                    @if (item.Round3 != null)
+                    {
+                        <th>成绩</th>
+                        <th>得分</th>
+                    }
+                    @if (item.Round4 != null)
+                    {
+                        <th>成绩</th>
+                        <th>得分</th>
+                    }
+                </tr>
+            }
+
+            <tr>
+
+                <td>
+                    @Html.HiddenFor(modelItem => Model.Scores[i].CompetitionId)
+                    @Html.HiddenFor(modelItem => Model.Scores[i].ContestantId)
+                    @Html.TextBoxFor(modelItem => Model.Scores[i].Order)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalScore)
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.Contestant.Number)</td>
+                <td>@Html.DisplayFor(modelItem => item.Contestant.Name)</td>
+
+                <td>@Html.DisplayFor(modelItem => item.Round1.Result)</td>
+                <td>@Html.DisplayFor(modelItem => item.Round1.Score)</td>
+
+                <td>@Html.DisplayFor(modelItem => item.Round2.Result)</td>
+                <td>@Html.DisplayFor(modelItem => item.Round2.Score)</td>
+                @if (item.Round3 != null)
+                {
+                    <td>@Html.DisplayFor(modelItem => item.Round3.Result)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Round3.Score)</td>
+                }
+                @if (item.Round4 != null)
+                {
+                    <td>@Html.DisplayFor(modelItem => item.Round4.Result)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Round4.Score)</td>
+                }
+                <td>@Html.DisplayFor(modelItem => item.TotalResult)</td>
+            </tr>
+        }
+
+    </table>
+    <div><input type="submit" value="保存成绩"/></div>
+}

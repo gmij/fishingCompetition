@@ -1,4 +1,4 @@
-﻿@model IList<fishingScore.Models.RoundScoreViewModel>
+﻿@model fishingScore.Models.RoundCompetitionViewModel
 
 <table class="table">
     <tr>
@@ -15,21 +15,22 @@
     </tr>
 @using (Html.BeginForm())
 {
+    @Html.HiddenFor(model => Model.Round)
     @Html.AntiForgeryToken()
     //foreach (var item in Model)
-    for(var i = 0; i < Model?.Count(); i++)
+    for(var i = 0; i < Model.RoundScores.Count(); i++)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => Model[i].Contestant.Name)
+                @Html.DisplayFor(modelItem => Model.RoundScores[i].Contestant.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => Model[i].Contestant.Number)
+                @Html.DisplayFor(modelItem => Model.RoundScores[i].Contestant.Number)
             </td>
-            <td>
-                @Html.HiddenFor(model => Model[i].Id)
-                @Html.HiddenFor(model => Model[i].Contestant.GroupNum)
-                @Html.EditorFor(modelItem => Model[i].Result)
+            <td id="#@Model.RoundScores[i].Contestant.Number">
+                @Html.HiddenFor(model => Model.RoundScores[i].Id)
+                @Html.HiddenFor(model => Model.RoundScores[i].GroupNum)
+                @Html.EditorFor(modelItem => Model.RoundScores[i].Result)
             </td>
         </tr>
     }
@@ -37,6 +38,14 @@
     <tr>
         <td colspan="4">
             <input type="submit" value="结束本轮比赛" class="btn btn-default" />
+            @if (Model.Round > 1)
+            {
+                @Html.ActionLink("查看上一轮成绩", "BeforeScore", new {id = Model.Round - 1}, new {target = "_blank"})
+            }
+            @if (Model.Round%2 == 0)
+            {
+                <input type="checkbox" name="endGame"/><label>结束所有比赛</label>
+            }
         </td>
     </tr>
             

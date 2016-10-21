@@ -1,0 +1,42 @@
+﻿@model IEnumerable<fishingScore.Persistence.RoundScore>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.Number)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.GroupNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Result)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Score)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contestant.Number)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contestant.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contestant.GroupNum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Result)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Score)
+        </td>
+    </tr>
+}
+
+</table>

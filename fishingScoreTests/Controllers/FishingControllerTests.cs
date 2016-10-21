@@ -340,6 +340,119 @@ namespace fishingScore.Controllers.Tests
             }
         }
 
+
+        [TestMethod()]
+        public void StatisticalScoreTestTwoRound_大小分相同重量也相同()
+        {
+            #region Round 1
+
+
+
+            IList<RoundScorePostViewModel> round1Scores = new List<RoundScorePostViewModel>()
+            {
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "洪天然", Result = 8.72f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "礼斌", Result = 9.53f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "连顺义", Result = 0},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "陈嘉璋", Result = 0},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "邱运财", Result = 14.58f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "郑福钓", Result = 8.62f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "傅寿南", Result = 14.45f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "罗道炳", Result = 6.73f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "朱典尧", Result = 7.51f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "周建平", Result = 0},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "魏奕泰", Result = 0},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "游克仁", Result = 5.4f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "唐兆光", Result = 0},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "谢成宝", Result = 6.95f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "林源", Result = 0},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "林炳通", Result = 5.08f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "郑坤海", Result = 0},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "张木华", Result = 13.15f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "俞关贵", Result = 10.99f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "潘金生", Result = 0f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "林鸣国", Result = 0f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "赖凯文", Result = 8.36f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "郑汉聪", Result = 11.22f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "李占源", Result = 6.73f},
+
+            };
+
+            #endregion
+
+
+            #region Round 2
+
+            IList<RoundScorePostViewModel> round2Scores = new List<RoundScorePostViewModel>()
+            {
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "洪天然", Result = 20.87f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "礼斌", Result = 9.03f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "连顺义", Result = 10.23f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "陈嘉璋", Result = 6.27f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "邱运财", Result = 18.89f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "郑福钓", Result = 27.93f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "傅寿南", Result = 0f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "罗道炳", Result = 12.76f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "朱典尧", Result = 9.02f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "周建平", Result = 0},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "魏奕泰", Result = 0},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "游克仁", Result = 0},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "唐兆光", Result = 8.23f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "谢成宝", Result = 10.79f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "林源", Result = 6.16f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "林炳通", Result = 0},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "郑坤海", Result = 14.24f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "张木华", Result = 10.27f},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "俞关贵", Result = 0},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "潘金生", Result = 0},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "林鸣国", Result = 5.85f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "赖凯文", Result = 0},
+
+                new RoundScorePostViewModel() { GroupNum = "1", Id = "郑汉聪", Result = 13.8f},
+                new RoundScorePostViewModel() { GroupNum = "2", Id = "李占源", Result = 12.76f},
+
+            };
+
+            #endregion
+
+            var result1 = FishingController.StatisticalScore(round1Scores);
+            result1 = FishingController.AverageEqualScores(result1);
+
+            var result2 = FishingController.StatisticalScore(round2Scores);
+            result2 = FishingController.AverageEqualScores(result2);
+
+            var k = from t1 in result1
+                    join t2 in result2 on t1.Id equals t2.Id
+                    select new ContestantCompetitionScore(t1, t2);
+
+            var ls = FishingController.Order(k.ToList());
+
+            foreach (var score in ls)
+            {
+                Console.WriteLine($"{score.Order} ~~ {score.Name}: {score.TotalScore} - {score.TotalResult}");
+            }
+        }
+
         [TestMethod()]
         public void StatisticalScoreTest4Round()
         {
@@ -552,6 +665,36 @@ namespace fishingScore.Controllers.Tests
                 Console.WriteLine($"{score.Order} ~~ {score.Name}: {score.TotalScore} - {score.TotalResult}");
             }
         }
+
+
+
+        [TestMethod]
+
+        public void TestMaxCount()
+        {
+            IDictionary<string, string> xx = new Dictionary<string, string>()
+            {
+                {"1", "1" },
+                {"2", "1" },
+                {"3", "1" },
+                {"4", "1" },
+                {"5", "1" },
+                {"6", "2" },
+                {"7", "2" },
+                {"8", "2" },
+                {"9", "3" },
+                {"10", "3" },
+                {"11", "3" },
+                {"12", "3" },
+
+            };
+
+            var t = xx.GroupBy(k => k.Value).Select(t1 => new { Key = t1.Key, Count = t1.Count()}).Max(t2 => t2.Count);
+            
+            Console.WriteLine(t);
+        }
+
+      
 
     }
 }

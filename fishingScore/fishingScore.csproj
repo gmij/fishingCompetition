@@ -138,14 +138,26 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Models\CompetitionResultPostData.cs" />
     <Compile Include="Controllers\FishingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\ContestantCompetitionRealScoreViewModel.cs" />
+    <Compile Include="Models\ContestantViewModel.cs" />
     <Compile Include="Models\FishingViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\GamingViewModel.cs" />
+    <Compile Include="Models\RoundCompetitionPostViewModel.cs" />
+    <Compile Include="Models\RoundCompetitionViewModel.cs" />
+    <Compile Include="Models\RoundScorePostViewModel.cs" />
+    <Compile Include="Models\RoundScoreViewModel.cs" />
+    <Compile Include="Models\ScorePreviewViewModel.cs" />
     <Compile Include="Persistence\Competition.cs" />
+    <Compile Include="Persistence\Contestant.cs" />
+    <Compile Include="Persistence\ContestantCompetitionScore.cs" />
     <Compile Include="Persistence\FishingContext.cs" />
+    <Compile Include="Persistence\RoundScore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +209,12 @@
     <Content Include="Views\Fishing\ListContestant.cshtml" />
     <Content Include="Views\Fishing\AddContestant.cshtml" />
     <Content Include="Views\Fishing\Round.cshtml" />
+    <Content Include="Views\Fishing\BeforeScore.cshtml" />
+    <Content Include="Views\Fishing\Index.cshtml" />
+    <Content Include="Views\Fishing\ScorePreview.cshtml" />
+    <Content Include="Views\Fishing\Over.cshtml" />
+    <Content Include="Views\Fishing\ScorePrint.cshtml" />
+    <Content Include="Views\Fishing\View.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
